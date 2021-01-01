@@ -1,3 +1,7 @@
+var PLAY=1;
+var END=0;
+var gameState=1;
+
 var survivalTime=0;
 
 var monkey , monkey_running
@@ -52,7 +56,26 @@ function draw() {
   survivalTime=Math.ceil(frameCount/frameRate())
   text("survivalTime: "+survivalTime,100,50);
   
-  
+    if(gameState===PLAY){
+      banana();
+      obstacle();
+    
+    if(FoodGroup.isTouching(monkey)){
+      FoodGroup.destroyEach();
+     }
+    
+    if(obstacleGroup.isTouching(monkey)){
+      gameState=END
+     }
+   }
+    
+  if(gameState===END){
+   FoodGroup.destroyEach();
+   obstacleGroup.destroyEach();
+   monkey.x=1000;
+   text("GameOver",150,200);
+  }
+    
   if(ground.x<0){
     ground.x=ground.width/2
   }
@@ -63,8 +86,6 @@ function draw() {
   }
 
    monkey.velocityY=monkey.velocityY+0.8;
-   banana();
-   obstacle();
   
   monkey.collide(ground);
   
@@ -83,6 +104,7 @@ function obstacle(){
    //add each obstacle to the group
     obstacleGroup.add(obstacle);
 }
+
 }
 
 function banana(){
